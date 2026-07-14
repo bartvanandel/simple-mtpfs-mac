@@ -395,9 +395,6 @@ bool SMTPFileSystem::parseOptions(int argc, char **argv)
 
 void SMTPFileSystem::printHelp() const
 {
-    struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
-    struct fuse_operations tmp_operations;
-    memset(&tmp_operations, 0, sizeof(tmp_operations));
     std::cout
         << "Usage: " << smtpfs_basename(m_args.argv[0]) << " <source> mountpoint [options]\n"
         << "\n"
@@ -415,10 +412,16 @@ void SMTPFileSystem::printHelp() const
 #endif
         << "    -o enable-move         enable the move operations\n"
         << "\n";
+
+    struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
     fuse_opt_add_arg(&args, m_args.argv[0]);
     fuse_opt_add_arg(&args, "-ho");
     
+    struct fuse_operations tmp_operations;
+    memset(&tmp_operations, 0, sizeof(tmp_operations));
+
     fuse_main(args.argc, args.argv, &tmp_operations, nullptr);
+
     fuse_opt_free_args(&args);
 
     std::cout
@@ -428,14 +431,17 @@ void SMTPFileSystem::printHelp() const
 
 void SMTPFileSystem::printVersion() const
 {
-    struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
-    struct fuse_operations tmp_operations;
-    memset(&tmp_operations, 0, sizeof(tmp_operations));
-    fuse_opt_add_arg(&args, m_args.argv[0]);
-    fuse_opt_add_arg(&args, "--version");
     std::cout << PACKAGE_NAME << " version: " << PACKAGE_VERSION << "\n";
 
+    struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
+    fuse_opt_add_arg(&args, m_args.argv[0]);
+    fuse_opt_add_arg(&args, "--version");
+
+    struct fuse_operations tmp_operations;
+    memset(&tmp_operations, 0, sizeof(tmp_operations));
+
     fuse_main(args.argc, args.argv, &tmp_operations, nullptr);
+
     fuse_opt_free_args(&args);
 }
 
