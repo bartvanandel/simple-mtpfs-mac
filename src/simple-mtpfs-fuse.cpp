@@ -501,7 +501,7 @@ int SMTPFileSystem::getattr(const char *path, struct stat *buf)
             const TypeFile *file = content->file(tmp_file);
             buf->st_ino = file->id();
             buf->st_size = file->size();
-            buf->st_blocks = (file->size() / 512) + (file->size() % 512 > 0 ? 1 : 0);
+            buf->st_blocks = (buf->st_size / 512) + (buf->st_size % 512 > 0 ? 1 : 0);
             buf->st_nlink = 1;
             buf->st_mode = S_IFREG | 0644;
             buf->st_mtime = file->modificationDate();
