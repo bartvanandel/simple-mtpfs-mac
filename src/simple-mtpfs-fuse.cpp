@@ -215,6 +215,7 @@ SMTPFileSystem::SMTPFileSystemOptions::SMTPFileSystemOptions()
     , m_help(false)
     , m_version(false)
     , m_verbose(false)
+    , m_enable_appledouble(false)
     , m_enable_move(false)
     , m_list_devices(false)
     , m_device_no(1)
@@ -320,6 +321,7 @@ bool SMTPFileSystem::parseOptions(int argc, char **argv)
     #define SMTPFS_OPT_KEY(t, p, v) { t, offsetof(SMTPFileSystemOptions, p), v }
 
     static struct fuse_opt smtpfs_opts[] = {
+        SMTPFS_OPT_KEY("enable-appledouble", m_enable_appledouble, 1),
         SMTPFS_OPT_KEY("enable-move", m_enable_move, 1),
         SMTPFS_OPT_KEY("--device %i", m_device_no, 0),
         SMTPFS_OPT_KEY("-l", m_list_devices, 1),
@@ -367,6 +369,13 @@ bool SMTPFileSystem::parseOptions(int argc, char **argv)
     // Force single-threaded mode. MTP doesn't support parallel operations properly.
     fuse_opt_add_arg(&m_args, "-s");
 
+#ifdef MTPFS_NOAPPLEDOUBLE
+    // Provide 'noappledouble' option by default. .DS_Store file handling may fail or cause locks.
+    if (!m_options.m_enable_appledouble) {
+        fuse_opt_add_arg(&m_args, "-onoappledouble");
+    }
+#endif
+
     if (m_options.m_verbose) {
         Logger::setGlobalVerbose();
         fuse_opt_add_arg(&m_args, "-f");
@@ -389,17 +398,23 @@ void SMTPFileSystem::printHelp() const
     struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
     struct fuse_operations tmp_operations;
     memset(&tmp_operations, 0, sizeof(tmp_operations));
-    std::cerr << "Usage: " << smtpfs_basename(m_args.argv[0])
-              << " <source> mountpoint [options]\n\n"
+    std::cerr
+        << "Usage: " << smtpfs_basename(m_args.argv[0]) << " <source> mountpoint [options]\n"
+        << "\n"
         << "General options:\n"
         << "    -o opt,[opt...]        mount options\n"
         << "    -h   --help            print help\n"
-        << "    -V   --version         print version\n\n"
+        << "    -V   --version         print version\n"
+        << "\n"
         << PACKAGE_NAME << " options:\n"
         << "    -v   --verbose         verbose output, implies -f\n"
         << "    -l   --list-devices    print available devices. Supports <source> option\n"
         << "         --device          select a device number to mount\n"
-        << "    -o enable-move         enable the move operations\n\n";
+#ifdef MTPFS_NOAPPLEDOUBLE
+        << "    -o enable-appledouble  omit noappledouble option\n"
+#endif
+        << "    -o enable-move         enable the move operations\n"
+        << "\n";
     fuse_opt_add_arg(&args, m_args.argv[0]);
     fuse_opt_add_arg(&args, "-ho");
     

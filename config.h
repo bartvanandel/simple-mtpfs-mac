@@ -71,3 +71,6 @@
 
 /* USB device path format string */
 /* #undef USB_DEVPATH */
+
+/* Define to 1 if you want `-o noappledouble` to be provided by default. */
+/* #undef MTPFS_NOAPPLEDOUBLE */

@@ -47,6 +47,7 @@ add_compile_options(
   -DHAVE_LIBMTP=1
   -DHAVE_LIBMTP_H=1
   -DHAVE_LIBMTP_CHECK_CAPABILITY=1
+  -DMTPFS_NOAPPLEDOUBLE=1
 )
 
 file (GLOB MPTFS_SRC "./src/*.cpp")

@@ -42,6 +42,7 @@ private:
         int m_help;
         int m_version;
         int m_verbose;
+        int m_enable_appledouble;
         int m_enable_move;
         int m_list_devices;
         int m_device_no;
