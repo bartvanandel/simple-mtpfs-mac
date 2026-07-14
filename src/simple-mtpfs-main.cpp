@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     SMTPFileSystem *filesystem = SMTPFileSystem::instance();
 
     if (!filesystem->parseOptions(argc, argv)) {
-        std::cout << "Wrong usage! See `" << smtpfs_basename(argv[0])
+        std::cerr << "Wrong usage! See `" << smtpfs_basename(argv[0])
             << " -h' for details\n";
         return 1;
     }

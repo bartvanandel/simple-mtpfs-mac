@@ -398,7 +398,7 @@ void SMTPFileSystem::printHelp() const
     struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
     struct fuse_operations tmp_operations;
     memset(&tmp_operations, 0, sizeof(tmp_operations));
-    std::cerr
+    std::cout
         << "Usage: " << smtpfs_basename(m_args.argv[0]) << " <source> mountpoint [options]\n"
         << "\n"
         << "General options:\n"
@@ -420,7 +420,10 @@ void SMTPFileSystem::printHelp() const
     
     fuse_main(args.argc, args.argv, &tmp_operations, nullptr);
     fuse_opt_free_args(&args);
-    std::cerr << "\nReport bugs to <" << PACKAGE_BUGREPORT << ">.\n";
+
+    std::cout
+        << "\n"
+        << "Report bugs to <" << PACKAGE_BUGREPORT << ">.\n";
 }
 
 void SMTPFileSystem::printVersion() const
