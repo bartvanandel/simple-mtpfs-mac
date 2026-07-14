@@ -505,6 +505,7 @@ int SMTPFileSystem::getattr(const char *path, struct stat *buf)
             buf->st_nlink = 1;
             buf->st_mode = S_IFREG | 0644;
             buf->st_mtime = file->modificationDate();
+            buf->st_birthtime = buf->st_mtime;
             buf->st_ctime = buf->st_mtime;
             buf->st_atime = buf->st_mtime;
         } else {
