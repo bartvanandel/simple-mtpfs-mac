@@ -363,6 +363,8 @@ bool SMTPFileSystem::parseOptions(int argc, char **argv)
     }
 
     fuse_opt_add_arg(&m_args, m_options.m_mount_point);
+
+    // Force single-threaded mode. MTP doesn't support parallel operations properly.
     fuse_opt_add_arg(&m_args, "-s");
 
     if (m_options.m_verbose) {
