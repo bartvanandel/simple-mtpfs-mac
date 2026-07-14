@@ -28,8 +28,6 @@ brew install llvm cmake
 
 For macFUSE, you may need to do some configurations on allowing kernel extensions. Follow the instructions on the macFUSE website. 
 
-Then, please figure out the installation path of the libraries above and the corresponding header paths, and set those paths manually in `CMakeLists.txt`, by setting the value of variables. For instance, change `set(LIBUSB_LIBRARIES)` to `set(LIBUSB_LIBRARIES /path/to/library)`. I would really welcome any suggestions on how to make CMake find those automatically - but at the moment that's what I have got.
-
 Then we are ready to run the usual thing in the terminal
 
 ```shell
@@ -40,6 +38,10 @@ cmake --build .
 ```
 
 Then copy the executable produced to anywhere you want.
+
+During the `cmake ..` command above, CMake should automatically find the required libraries on your system, as long as they are installed in their default locations. If not, you may need to tinker with the respective `find_library` and `find_path` calls inside `CMakeLists.txt`. If any of the locations change, use `cmake .. --fresh` to have CMake remove any cached files first, or re-create the `build` directory manually yourself.
+
+### Windows support
 
 It should also be easy to port the program to windows, with winfsp and msys2. However, you might need to modify some codes.
 
