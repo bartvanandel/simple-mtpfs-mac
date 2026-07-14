@@ -248,8 +248,8 @@ const TypeDir *MTPDevice::dirFetchContent(std::string path)
         for (LIBMTP_devicestorage_t *s = m_device->storage; s; s = s->next) {
             m_root_dir.addDir(TypeDir(s_root_node, 0, s->id,
                 std::string(s->StorageDescription)));
-            m_root_dir.setFetched();
         }
+        m_root_dir.setFetched();
     }
 
     if (m_root_dir.dirCount() == 1)
@@ -265,8 +265,7 @@ const TypeDir *MTPDevice::dirFetchContent(std::string path)
         if (member.empty())
             continue;
 
-        const TypeDir *tmp = dir->dir(member);
-        if (!tmp && !dir->isFetched()) {
+        if (!dir->isFetched()) {
             criticalEnter();
             LIBMTP_file_t *content = LIBMTP_Get_Files_And_Folders(
                 m_device, dir->storageid(), dir->id());
@@ -279,29 +278,30 @@ const TypeDir *MTPDevice::dirFetchContent(std::string path)
             }
             LIBMTP_Free_Files_And_Folders(&content);
             dir->setFetched();
-            tmp = dir->dir(member);
         }
 
+        const TypeDir *tmp = dir->dir(member);
         if (!tmp)
             return nullptr;
+
         dir = const_cast<TypeDir*>(tmp);
     }
 
-    if (dir->isFetched())
-        return dir;
-
-    criticalEnter();
-    dir->setFetched();
-    LIBMTP_file_t *content = LIBMTP_Get_Files_And_Folders(
-        m_device, dir->storageid(), dir->id());
-    criticalLeave();
-    for (LIBMTP_file_t *f = content; f; f = f->next) {
-        if (f->filetype == LIBMTP_FILETYPE_FOLDER)
-            dir->addDir(TypeDir(f));
-        else
-            dir->addFile(TypeFile(f));
+    if (!dir->isFetched()) {
+        criticalEnter();
+        LIBMTP_file_t *content = LIBMTP_Get_Files_And_Folders(
+            m_device, dir->storageid(), dir->id());
+        criticalLeave();
+        for (LIBMTP_file_t *f = content; f; f = f->next) {
+            if (f->filetype == LIBMTP_FILETYPE_FOLDER)
+                dir->addDir(TypeDir(f));
+            else
+                dir->addFile(TypeFile(f));
+        }
+        LIBMTP_Free_Files_And_Folders(&content);
+        dir->setFetched();
     }
-    LIBMTP_Free_Files_And_Folders(&content);
+
     return dir;
 }
 
