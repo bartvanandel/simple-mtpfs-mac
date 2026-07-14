@@ -415,13 +415,7 @@ void SMTPFileSystem::printVersion() const
     fuse_opt_add_arg(&args, "--version");
     std::cout << PACKAGE_NAME << " version: " << PACKAGE_VERSION << "\n";
 
-    #ifdef ARG_DEBUG
-    puts("ARG debug");
-    char * test_argv[] = {args.argv[0], "-f", "/Users/jethrosu/me/codes_new/simple-mtpfs-remastered/build/mntpt"};
-    fuse_main(3, test_argv, &tmp_operations, nullptr);
-    #else
     fuse_main(args.argc, args.argv, &tmp_operations, nullptr);
-    #endif
     fuse_opt_free_args(&args);
 }
 
@@ -460,15 +454,7 @@ bool SMTPFileSystem::exec()
             return false;
     }
     m_device.enableMove(m_options.m_enable_move);
-    puts("fuseman!");
     
-    #ifdef ARG_DEBUG
-        puts("ARG debug");
-        system("say arg debug");
-        char * test_argv[] = {m_args.argv[0], "-odebug", "/Users/jethrosu/me/codes_new/simple-mtpfs-remastered/build/mntpt"};
-        fuse_main(3, test_argv, &m_fuse_operations, nullptr);
-        return true;
-    #endif
     if (fuse_main(m_args.argc, m_args.argv, &m_fuse_operations, nullptr) > 0) {
         return false;
     }
