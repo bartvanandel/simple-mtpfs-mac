@@ -311,7 +311,7 @@ int MTPDevice::dirCreateNew(const std::string &path)
     const std::string tmp_dirname(smtpfs_dirname(path));
     const TypeDir *dir_parent = dirFetchContent(tmp_dirname);
     if (!dir_parent || dir_parent->id() == 0) {
-        logerr("Can not remove directory '", path, "'.\n");
+        logerr("Can not create directory '", path, "': base directory does not exist.\n");
         return -EINVAL;
     }
     char *c_name = strdup(tmp_basename.c_str());
