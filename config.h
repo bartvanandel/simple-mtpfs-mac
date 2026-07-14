@@ -43,17 +43,14 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
-/* Name of package */
-#define PACKAGE "simple-mtpfs"
-
-/* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "https://github.com/suziwei/simple-mtpfs-remastered/"
-
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "simple-mtpfs"
 
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "0.4.0"
+
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "simple-mtpfs 0.4.0"
+#define PACKAGE_STRING (PACKAGE_NAME " " PACKAGE_VERSION)
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "simple-mtpfs"
@@ -61,8 +58,8 @@
 /* Define to the home page for this package. */
 #define PACKAGE_URL ""
 
-/* Define to the version of this package. */
-#define PACKAGE_VERSION "0.4.0"
+/* Define to the address where bug reports for this package should be sent. */
+#define PACKAGE_BUGREPORT "https://github.com/su-z/simple-mtpfs-mac/"
 
 /* Define to 1 if all of the C90 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
@@ -74,6 +71,3 @@
 
 /* USB device path format string */
 /* #undef USB_DEVPATH */
-
-/* Version number of package */
-#define VERSION "0.4.0"

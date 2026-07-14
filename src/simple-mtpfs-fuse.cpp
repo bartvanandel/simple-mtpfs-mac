@@ -387,13 +387,13 @@ void SMTPFileSystem::printHelp() const
     struct fuse_args args = FUSE_ARGS_INIT(0, NULL);
     struct fuse_operations tmp_operations;
     memset(&tmp_operations, 0, sizeof(tmp_operations));
-    std::cerr << "usage: " << smtpfs_basename(m_args.argv[0])
+    std::cerr << "Usage: " << smtpfs_basename(m_args.argv[0])
               << " <source> mountpoint [options]\n\n"
-        << "general options:\n"
+        << "General options:\n"
         << "    -o opt,[opt...]        mount options\n"
         << "    -h   --help            print help\n"
         << "    -V   --version         print version\n\n"
-        << "simple-mtpfs options:\n"
+        << PACKAGE_NAME << " options:\n"
         << "    -v   --verbose         verbose output, implies -f\n"
         << "    -l   --list-devices    print available devices. Supports <source> option\n"
         << "         --device          select a device number to mount\n"
@@ -413,7 +413,7 @@ void SMTPFileSystem::printVersion() const
     memset(&tmp_operations, 0, sizeof(tmp_operations));
     fuse_opt_add_arg(&args, m_args.argv[0]);
     fuse_opt_add_arg(&args, "--version");
-    std::cout << "simple-mtpfs version " << VERSION << "\n";
+    std::cout << PACKAGE_NAME << " version: " << PACKAGE_VERSION << "\n";
 
     #ifdef ARG_DEBUG
     puts("ARG debug");
